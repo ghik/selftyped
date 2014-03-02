@@ -1,0 +1,43 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = "1.11"
+}
+
+ext {
+    scalaVersion = '2.11.0-M8'
+}
+
+allprojects {
+    apply plugin: 'idea'
+}
+
+subprojects {
+    apply plugin: 'scala'
+    
+    repositories {
+        mavenCentral()
+    }
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
+    dependencies {
+        compile("org.scala-lang:scala-library:$scalaVersion")
+    }
+}
+
+project(":macros") {
+    dependencies {
+        compile("org.scala-lang:scala-reflect:$scalaVersion")
+    }
+}
+
+project(":main") {
+    dependencies {
+        compile(project(":macros"))
+    }
+}
+
